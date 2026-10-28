@@ -1,4 +1,4 @@
-import { STORE_KEY, cleanState, secondsLeft, formatTime } from './core.js';
+import { STORE_KEY, cleanState, secondsLeft, formatTime, filterTasks } from './core.js';
 const $ = selector => document.querySelector(selector);
 let state = { tasks: [] };
 let selectedId = null;
@@ -22,9 +22,12 @@ function render() {
   $('#progress').max = state.tasks.length || 1;
   $('#progress').value = done;
   $('#task-count').textContent = `${state.tasks.length} всего`;
-  $('#empty').hidden = state.tasks.length > 0;
+  const visible = filterTasks(state.tasks, $('#search').value, $('#filter').value);
+  $('#empty').hidden = visible.length > 0;
+  $('#empty h3').textContent = state.tasks.length ? 'Подходящих задач нет' : 'Здесь начинается ясность';
+  $('#empty p').textContent = state.tasks.length ? 'Попробуйте другой запрос или выберите «Все задачи».' : 'Добавьте первое дело. Большие планы начинаются с небольшого шага.';
   $('#tasks').replaceChildren();
-  for (const task of state.tasks) {
+  for (const task of visible) {
     const li = document.createElement('li');
     li.className = `task-item${task.done ? ' done' : ''}${selectedId === task.id ? ' active' : ''}`;
     const check = document.createElement('input');
@@ -52,8 +55,11 @@ $('#task-form').addEventListener('submit', event => {
   if (!title) { $('#task-input').focus(); return; }
   if (state.tasks.length >= 5000) { announce('Лимит — 5000 задач. Удалите ненужные задачи.'); return; }
   state.tasks.push({ id: crypto.randomUUID(), title, done: false });
+  $('#search').value = ''; $('#filter').value = 'all';
   save(); render(); $('#task-input').value = ''; $('#task-input').focus(); announce('Задача добавлена.');
 });
+$('#search').addEventListener('input', render);
+$('#filter').addEventListener('change', render);
 function drawTimer() { $('#timer').textContent = formatTime(remaining); document.title = running ? `${formatTime(remaining)} — Тихий фокус` : 'Тихий фокус — пространство для важных дел'; }
 function stopTicker() { clearInterval(ticker); ticker = null; }
 function tick() {

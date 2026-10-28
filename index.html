@@ -18,7 +18,7 @@
       <section class="tasks-panel" aria-labelledby="tasks-heading">
         <div class="section-heading"><h2 id="tasks-heading">Ваши дела</h2><span id="task-count" class="pill">0 задач</span></div>
         <form id="task-form"><label for="task-input" class="sr-only">Новая задача</label><input id="task-input" placeholder="Что хотите сделать?" maxlength="200" required autocomplete="off"><button class="primary" type="submit">Добавить <span aria-hidden="true">+</span></button></form>
-        <div id="filter-slot"></div>
+        <div class="filters"><label class="sr-only" for="search">Поиск задач</label><input id="search" type="search" placeholder="Найти в списке…" autocomplete="off"><label class="sr-only" for="filter">Показать задачи</label><select id="filter"><option value="all">Все задачи</option><option value="active">В работе</option><option value="done">Готово</option></select></div>
         <ul id="tasks" class="task-list"></ul>
         <div id="empty" class="empty"><span aria-hidden="true">✧</span><h3>Здесь начинается ясность</h3><p>Добавьте первое дело. Большие планы начинаются с небольшого шага.</p></div>
         <div id="backup-slot"></div>

@@ -13,3 +13,7 @@ export function cleanState(value) {
 }
 export function secondsLeft(deadline, now = Date.now()) { return Math.max(0, Math.ceil((deadline - now) / 1000)); }
 export function formatTime(seconds) { return `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`; }
+export function filterTasks(tasks, query = '', filter = 'all') {
+  const needle = query.trim().toLocaleLowerCase('ru');
+  return tasks.filter(task => task.title.toLocaleLowerCase('ru').includes(needle) && (filter === 'all' || (filter === 'done' ? task.done : !task.done)));
+}
